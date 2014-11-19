@@ -65,23 +65,27 @@ class MobileGallery extends SimpleModule
 
 
   _bind: ->
-    $(document.body).on 'touchstart.mobileGallery', @_touchstart
-      .on 'click', '.gallery-control #link-close', @destroy
+    if @galleryImage.height() > @winHeight
+      $(document.body).on 'touchstart.mobileGallery', @_touchstart
+    else
+      @gallery.on 'touchmove.mobileGallery', (e) ->
+        e.preventDefault()
+
+    $(document.body).on 'click', '.gallery-control #link-close', @destroy
 
 
   _touchstart: (e) =>
-    if @galleryImage.height() > @winHeight
-      offsetTop = @galleryImage.offset().top
-      touch = event.touches[0]
-      @startPos =
-        x: touch.clientX
-        y: touch.clientY - offsetTop
+    offsetTop = @galleryImage.offset().top
+    touch = event.touches[0]
+    @startPos =
+      x: touch.clientX
+      y: touch.clientY - offsetTop
 
-      @galleryImage.css
-          transition: 'opacity 300ms ease-out'
+    @galleryImage.css
+      transition: 'opacity 300ms ease-out'
 
-      @gallery.on 'touchmove.mobileGallery', @_touchmove
-        .on 'touchend.mobileGallery', @_touchend
+    @gallery.on 'touchmove.mobileGallery', @_touchmove
+      .on 'touchend.mobileGallery', @_touchend
 
 
   _touchmove: (e) =>
