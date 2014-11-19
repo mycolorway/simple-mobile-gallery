@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple mobile-gallery Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link media="all" rel="stylesheet" type="text/css" href="styles/mobile-gallery.css" />
+    <style type="text/css" media="all">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrapper {
+            margin: 20px;
+        }
+
+        .image-list {
+            margin-bottom: 100px;
+        }
+
+        .image {
+            display: inline-block;
+            width: 100px;
+            margin: 0 20px 50px 0;
+            text-align: center;
+        }
+
+        .image img {
+            max-width: 100px;
+            max-height: 100px;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script type="text/javascript" src="vendor/bower/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="vendor/bower/simple-module/lib/module.js"></script>
+    <script type="text/javascript" src="lib/mobile-gallery.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $("a.image").on("click", function(e) {
+                var el = $(this)
+                simple.mobileGallery({
+                    el: el,
+                    itemCls: ".image",
+                    wrapCls: ".image-list"
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <h3>请用手机访问本页面</h3>
+    <div class="one image-list">
+        <h4>One picture</h4>
+
+        <a href="javascript:;" class="image" data-image-name="image01" data-image-src="images/01.png">
+            <img alt="image01" src="images/01.png" title="image01">
+        </a>
+    </div>
+
+    <div class="few image-list">
+        <h4>Few pictures</h4>
+
+        <a href="javascript:;" class="image">
+            <img alt="image02" src="images/02.png" title="image02">
+        </a>
+        <a href="javascript:;" class="image">
+            <img alt="image03" src="images/03.gif" title="image03">
+        </a>
+        <a href="javascript:;" class="image">
+            <img alt="image04" src="images/04.png" title="image04">
+        </a>
+    </div>
+</div>
+
+</body>
+
+</html>
+
+
