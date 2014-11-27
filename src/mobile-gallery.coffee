@@ -5,6 +5,7 @@ class MobileGallery extends SimpleModule
     el:      null
     itemCls: ""
     wrapCls: ""
+    formatSrc: null
 
   @i18n:
     'zh-CN':
@@ -101,11 +102,8 @@ class MobileGallery extends SimpleModule
 
 
   _touchstart: (e) =>
-    touch = event.touches[0]
-    @startPos =
-      x: touch.clientX
-      y: touch.clientY
-    @endPods = @startPos
+    @startPosX = event.touches[0].clientX
+    @endPosX = @startPosX
 
     @gallery.on 'touchmove.mobileGallery', @_touchmove
       .on 'touchend.mobileGallery', @_touchend
@@ -113,11 +111,7 @@ class MobileGallery extends SimpleModule
 
   _touchmove: (e) =>
     e.preventDefault()
-
-    touch = event.touches[0]
-    @endPods =
-      x: touch.clientX
-      y: touch.clientY
+    @endPosX = event.touches[0].clientX
 
 
   _touchend: (e) =>
@@ -125,7 +119,7 @@ class MobileGallery extends SimpleModule
 
     if @isMulti
       $index = @gallery.find('.index')
-      detlaX = @endPods.x - @startPos.x
+      detlaX = @endPosX - @startPosX
       offsetLeft = @list.offset().left
 
       # prev image
@@ -141,18 +135,21 @@ class MobileGallery extends SimpleModule
         index = $index.text() * 1 + 1
 
       if $image?.length
-        src = $image.data 'src'
-        @gallery.find('#link-origin').attr('href', src)
-        @gallery.addClass('loading') unless $image[0].src
-        $index.text index
-        @image = $image.attr('src', src).show()
         @list.css
           transform: "translate(#{ translateX }px, 0px)"
+
+        src = $image.data 'src'
+        $index.text index
+        @gallery.find('#link-origin').attr('href', src)
+        @gallery.addClass('loading') unless $image[0].src
+        @image = $image.attr('src', src).show()
 
 
   _getCurSrc: ($el) ->
     $img = if $el.is('[src]') then $el else $el.find('[src]:first')
-    return $el.data('image-src') or $el.data('origin-src') or $img.attr('src')
+    src = $el.data('image-src') or $el.data('origin-src') or $img.attr('src')
+    src = @opts.formatSrc.call(@, src) if $.isFunction @opts.formatSrc
+    return src
 
 
   destroy: =>
